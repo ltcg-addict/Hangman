@@ -1,6 +1,6 @@
-import pygame
+import pygame # type: ignore
 import random
-import threading
+import time
 import sys
 
 pygame.init()
@@ -9,7 +9,7 @@ pygame.font.init()
 window = pygame.display.set_mode((500, 500))
 pygame.display.set_caption("Hangman")
 
-font = pygame.font.SysFont("Arial", 30)
+font = pygame.font.Font("font.ttf", 100)
 
 char_eventkey_reference = {
   97: "a",
@@ -46,6 +46,12 @@ word = random.choice(words).lower().strip()
 live = -1
 lives = ["◯", "◯\n|", " ◯\n/|", " ◯\n/|arm", " ◯\n/|arm\n/", " ◯\n/|arm\n/ leg"]
 underscores = list("_" * len(word))
+
+underscores_text = font.render("".join(underscores), True, (255, 255, 255))
+window.blit(underscores_text, (250 - (underscores_text.get_rect().width / 2), 400))
+pygame.display.flip()
+pygame.display.update()
+
 p_word = word
 
 while True:
@@ -57,8 +63,7 @@ while True:
         guess = char_eventkey_reference[event.key]
       except KeyError:
         print("Not a letter")
-        guess = "asdfghjkklcdsgbjfjgfkjkijrgtynthitorelrtgkhtynk jhhn .jfjlghlkh'gdlkdsapddf;glb,hf'bg'.gb,.mn,.fgfbdshvgfkdrsmzAL:esomgbg jgzvfghjngffbgmbnkfdksnfjvfknjgf"
-        live -= 1
+        guess = " "
 
       if guess in word:
         while guess in word:
@@ -71,7 +76,9 @@ while True:
           print("You win! The word was " + "".join(underscores))
           sys.exit(0)
       else:
-        print("Not in word")
+        window.fill((255, 0, 0))
+        time.sleep(0.75)
+        pygame.display.flip()
         live += 1
         print(lives[live])
 
@@ -80,7 +87,7 @@ while True:
           sys.exit(0)
 
       window.fill((0, 0, 0))
-      window.blit(underscores_text, (50, 50))
+      window.blit(underscores_text, (250 - (underscores_text.get_rect().width / 2), 400))
 
       pygame.display.update()
       pygame.display.update()
