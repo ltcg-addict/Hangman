@@ -2,6 +2,8 @@ import pygame # type: ignore
 import random
 import time
 import sys
+from gtts import gTTS as tts
+from playsound import playsound
 
 pygame.init()
 pygame.font.init()
@@ -40,7 +42,7 @@ char_eventkey_reference = {
   122: "z",
 }
 
-theme = "anything"#input("Would you like the word to be about anything, programming, animals, or potatoes? ")
+theme = "anything"
 words = open(theme + ".txt", "r").readlines()
 word = random.choice(words).lower().strip()
 live = -1
@@ -81,6 +83,9 @@ while True:
         lives_image = pygame.transform.scale(lives_image, (300, 300))
 
         if live == 7:
+          speech = tts(text=p_word, lang="en", slow=False)
+          speech.save("ai_word.mp3")
+          playsound("ai_word.mp3")
           time.sleep(1.25)
           sys.exit(0)
 
